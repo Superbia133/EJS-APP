@@ -1,24 +1,18 @@
-const express = require("express");
-const path = require("path");
-require("dotenv").config();
+const express = require("express")
+const baseController = require("./controllers/baseController")
+const app = express()
 
-const app = express();
+// Set EJS as the view engine
+app.set("view engine", "ejs")
 
-// View engine
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+// Serve static files from the public folder
+app.use(express.static("public"))
 
-// Static folder
-app.use(express.static(path.join(__dirname, "public")));
+// Home route using MVC controller
+app.get("/", baseController.buildHome)
 
-// Homepage route
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
-const port = process.env.PORT || 5500;
-const host = process.env.HOST || "localhost";
-
+// Set and start the server
+const port = process.env.PORT || 5500
 app.listen(port, () => {
-  console.log(`App listening at http://${host}:${port}`);
-});
+  console.log(`Server running at http://localhost:${port}`)
+})
