@@ -1,30 +1,27 @@
-const { Pool } = require("pg")
-require("dotenv").config()
+const { Pool } = require("pg");
+require("dotenv").config();
 
-let pool
-if (process.env.NODE_ENV == "development") {
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  })
+// Create a pool using environment variables
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false, // Required for Render-hosted databases
+  },
+});
 
-  module.exports = {
-    async query(text, params) {
-      try {
-        const res = await pool.query(text, params)
-        console.log("executed query", { text })
-        return res
-      } catch (error) {
-        console.error("error in query", { text })
-        throw error
-      }
-    },
-  }
-} else {
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  })
-  module.exports = pool
-}
+module.exports = {
+  async query(text, params) {
+    try {
+      const res = await pool.query(text, params);
+      console.log("Executed query", { text });
+      return res;
+    } catch (error) {
+      console.error("Query error", { text, error });
+      throw error;
+    }
+  },
+};
