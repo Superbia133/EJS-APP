@@ -1,4 +1,4 @@
-const invModel = require("../../../classes/EJS-APP/models/inventory-model");
+const invModel = require("../models/inventory-model");
 
 const Util = {};
 
