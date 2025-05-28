@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1><%= title %></h1>
+
+    <!-- Flash messages -->
+    <%- messages() %>
+
+    <!-- Registration Form -->
+    <form action="/account/register" method="post" class="form">
+      <label for="account_firstname">First Name</label>
+      <input type="text" name="account_firstname" id="account_firstname" required>
+
+      <label for="account_lastname">Last Name</label>
+      <input type="text" name="account_lastname" id="account_lastname" required>
+
+      <label for="account_email">Email</label>
+      <input type="email" name="account_email" id="account_email" required>
+
+      <label for="account_password">Password</label>
+      <input type="password" name="account_password" id="account_password" 
+             required minlength="12" 
+             pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])"
+             title="Must be at least 12 characters, include one uppercase letter, one number, and one special character.">
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="/account/login">Login here</a></p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

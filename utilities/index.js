@@ -1,14 +1,16 @@
-const invModel = require("../models/inventory-model");
+const invModel = require("../models/inventory-model")
 
-const Util = {};
+const Util = {}
 
-// Build navigation bar
+/* ******************************
+ * Build navigation bar HTML
+ * ****************************** */
 Util.getNav = async function (req, res, next) {
-  let data = await invModel.getClassifications();
-  let list = "<ul>";
-  list += '<li><a href="/" title="Home page">Home</a></li>';
+  let data = await invModel.getClassifications()
+  let list = "<ul>"
+  list += '<li><a href="/" title="Home page">Home</a></li>'
   data.rows.forEach((row) => {
-    list += "<li>";
+    list += "<li>"
     list +=
       '<a href="/inv/type/' +
       row.classification_id +
@@ -16,14 +18,16 @@ Util.getNav = async function (req, res, next) {
       row.classification_name +
       ' vehicles">' +
       row.classification_name +
-      "</a>";
-    list += "</li>";
-  });
-  list += "</ul>";
-  return list;
-};
+      "</a>"
+    list += "</li>"
+  })
+  list += "</ul>"
+  return list
+}
 
-// Build vehicle detail HTML
+/* ******************************
+ * Build vehicle detail HTML
+ * ****************************** */
 Util.buildVehicleDetailHTML = function (vehicle) {
   return `
     <div class="vehicle-detail">
@@ -36,7 +40,16 @@ Util.buildVehicleDetailHTML = function (vehicle) {
         <p><strong>Color:</strong> ${vehicle.inv_color}</p>
       </div>
     </div>
-  `;
-};
+  `
+}
 
-module.exports = Util;
+/* ******************************
+ * Middleware for handling async errors
+ * ****************************** */
+Util.handleErrors = function (fn) {
+  return function (req, res, next) {
+    return Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
+
+module.exports = Util
