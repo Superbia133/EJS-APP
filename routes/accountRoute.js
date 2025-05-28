@@ -2,6 +2,7 @@ const express = require("express")
 const router = new express.Router()
 const utilities = require("../utilities")
 const accountController = require("../controllers/accountController")
+const regValidate = require("../utilities/account-validation") // ✅ Added for validation
 
 // Route to build login view
 router.get(
@@ -15,9 +16,11 @@ router.get(
   utilities.handleErrors(accountController.buildRegister)
 )
 
-// Route to handle registration form submission
+// Route to handle registration form submission with validation
 router.post(
   "/register",
+  regValidate.registrationRules(),
+  regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
 )
 
