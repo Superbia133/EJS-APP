@@ -1,13 +1,12 @@
 const { Pool } = require("pg");
-require("dotenv").config();
 
-// Create a pool using environment variables
+// Create a pool using Render's environment variables
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
   ssl: {
     rejectUnauthorized: false, // Required for Render-hosted databases
   },
