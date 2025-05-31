@@ -7,6 +7,7 @@ const pool = require("./database/")
 const baseController = require("./controllers/baseController")
 const staticRoutes = require("./routes/static")
 const accountRoutes = require("./routes/accountRoute")
+const inventoryRoutes = require("./routes/inventoryRoute") // ✅ Import inventory routes
 
 const app = express()
 
@@ -48,9 +49,10 @@ app.use(function (req, res, next) {
 // Route for home page
 app.get("/", baseController.buildHome)
 
-// Use static and account route files
+// Use route files
 app.use("/", staticRoutes)
 app.use("/account", accountRoutes)
+app.use("/inv", inventoryRoutes) // ✅ Register inventory route
 
 // 500 Error Handler (Server errors)
 app.use((err, req, res, next) => {
