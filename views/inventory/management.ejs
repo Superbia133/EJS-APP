@@ -4,13 +4,31 @@
 
 <main>
   <h1>Vehicle Management</h1>
+
   <% if (message) { %>
     <p class="notice"><%= message %></p>
   <% } %>
+
   <ul>
     <li><a href="/inv/add-classification">Add New Classification</a></li>
     <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
   </ul>
+
+  <h2>Manage Inventory</h2>
+  <p>Select a classification to see the vehicles associated with it.</p>
+
+  <!-- Dropdown populated by controller -->
+  <form>
+    <%= classificationList %>
+  </form>
+
+  <!-- Table populated via JavaScript -->
+  <table id="inventoryDisplay"></table>
+
+  <noscript>JavaScript must be enabled to use this page.</noscript>
 </main>
+
+<!-- Link to AJAX script -->
+<script src="/js/inventory.js"></script>
 
 <%- include("../partials/footer") %>

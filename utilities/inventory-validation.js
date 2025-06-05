@@ -81,14 +81,12 @@ invValidate.inventoryRules = () => {
 }
 
 /* ===============================
-   Check Inventory Validation Results
+   Check Inventory Validation Results (Add)
 ================================ */
 invValidate.checkInventoryData = async (req, res, next) => {
   let errors = validationResult(req)
   let nav = await utilities.getNav()
-  let classificationList = await utilities.buildClassificationList(
-    req.body.classification_id
-  )
+  let classificationList = await utilities.buildClassificationList(req.body.classification_id)
 
   if (!errors.isEmpty()) {
     res.render("inventory/add-inventory", {
@@ -96,7 +94,29 @@ invValidate.checkInventoryData = async (req, res, next) => {
       nav,
       classificationList,
       errors: errors.array(),
-      ...req.body, // populate sticky form fields
+      ...req.body,
+    })
+    return
+  }
+  next()
+}
+
+/* ===============================
+   Check Inventory Validation Results (Update)
+================================ */
+invValidate.checkUpdateData = async (req, res, next) => {
+  let errors = validationResult(req)
+  let nav = await utilities.getNav()
+  let classificationList = await utilities.buildClassificationList(req.body.classification_id)
+
+  if (!errors.isEmpty()) {
+    const itemName = `${req.body.inv_make} ${req.body.inv_model}`
+    res.render("inventory/edit-inventory", {
+      title: "Edit " + itemName,
+      nav,
+      classificationList,
+      errors: errors.array(),
+      ...req.body, // Populate form with existing data including inv_id
     })
     return
   }
