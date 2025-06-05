@@ -1,75 +1,88 @@
-// utilities/account-validation.js
-
-const utilities = require(".")
 const { body, validationResult } = require("express-validator")
+const utilities = require(".")
 
-const validate = {}
+const accValidate = {}
 
-/* **********************************
- *  Registration Data Validation Rules
- * ********************************* */
-validate.registrationRules = () => {
+/* ===============================
+   Registration Validation Rules
+================================ */
+accValidate.registrationRules = () => {
   return [
-    // First name: required and must be a string
-    body("account_firstname")
+    body("first_name")
       .trim()
-      .escape()
-      .notEmpty()
       .isLength({ min: 1 })
-      .withMessage("Please provide a first name."),
-
-    // Last name: required and must be a string
-    body("account_lastname")
+      .withMessage("First name is required."),
+    body("last_name")
       .trim()
-      .escape()
-      .notEmpty()
-      .isLength({ min: 2 })
-      .withMessage("Please provide a last name."),
-
-    // Email: required, must be valid, normalized
-    body("account_email")
+      .isLength({ min: 1 })
+      .withMessage("Last name is required."),
+    body("email")
       .trim()
-      .escape()
-      .notEmpty()
       .isEmail()
-      .normalizeEmail()
       .withMessage("A valid email is required."),
-
-    // Password: required, must be strong
-    body("account_password")
+    body("password")
       .trim()
-      .notEmpty()
-      .isStrongPassword({
-        minLength: 12,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1,
-      })
-      .withMessage("Password does not meet requirements."),
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters.")
   ]
 }
 
-/* ******************************
- * Check data and return errors or continue to registration
- * ***************************** */
-validate.checkRegData = async (req, res, next) => {
-  const { account_firstname, account_lastname, account_email } = req.body
-  let errors = []
-  errors = validationResult(req)
+/* ===============================
+   Check Registration Validation Results
+================================ */
+accValidate.checkRegData = async (req, res, next) => {
+  const { first_name, last_name, email } = req.body
+  let errors = validationResult(req)
+  let nav = await utilities.getNav()
+
   if (!errors.isEmpty()) {
-    let nav = await utilities.getNav()
     res.render("account/register", {
-      errors,
-      title: "Registration",
+      title: "Register",
       nav,
-      account_firstname,
-      account_lastname,
-      account_email,
+      errors: errors.array(),
+      first_name,
+      last_name,
+      email
     })
     return
   }
   next()
 }
 
-module.exports = validate
+/* ===============================
+   Login Validation Rules
+================================ */
+accValidate.loginRules = () => {
+  return [
+    body("email")
+      .trim()
+      .isEmail()
+      .withMessage("A valid email is required."),
+    body("password")
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters.")
+  ]
+}
+
+/* ===============================
+   Check Login Validation Results
+================================ */
+accValidate.checkLoginData = async (req, res, next) => {
+  const { email } = req.body
+  let errors = validationResult(req)
+  let nav = await utilities.getNav()
+
+  if (!errors.isEmpty()) {
+    res.render("account/login", {
+      title: "Login",
+      nav,
+      errors: errors.array(),
+      email
+    })
+    return
+  }
+  next()
+}
+
+module.exports = accValidate
