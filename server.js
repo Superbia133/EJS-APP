@@ -63,14 +63,24 @@ app.use("/account", accountRoutes)
 app.use("/inv", inventoryRoutes) // ✅ Register inventory route
 
 // 500 Error Handler (Server errors)
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
   console.error(err.stack)
-  res.status(500).render("errors/500", { title: "Server Error" })
+  const nav = await utilities.getNav()
+  res.status(500).render("errors/500", {
+    title: "Server Error",
+    message: err.message,
+    nav,
+  })
 })
 
 // 404 Error Handler (Page not found)
-app.use((req, res) => {
-  res.status(404).render("errors/404", { title: "Page Not Found" })
+app.use(async (req, res) => {
+  const nav = await utilities.getNav()
+  res.status(404).render("errors/404", {
+    title: "Page Not Found",
+    message: "Sorry, the page you're looking for doesn't exist.",
+    nav,
+  })
 })
 
 // Set and start the server

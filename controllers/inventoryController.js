@@ -283,6 +283,39 @@ async function updateInventory(req, res, next) {
   }
 }
 
+/* ========================
+   Build Detail View (Assignment 3)
+======================== */
+async function buildDetailView(req, res, next) {
+  const inv_id = parseInt(req.params.inv_id)
+  const nav = await utilities.getNav()
+
+  try {
+    const data = await invModel.getInventoryById(inv_id)
+    if (!data || !data.inv_id) {
+      throw new Error("Vehicle not found")
+    }
+
+    const itemName = `${data.inv_year} ${data.inv_make} ${data.inv_model}`
+    const detailHtml = utilities.buildVehicleDetailHTML(data)
+
+    res.render("inventory/detail", {
+      title: itemName,
+      nav,
+      html: detailHtml,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/* ========================
+   Trigger Intentional Error (Assignment 3)
+======================== */
+function triggerError(req, res, next) {
+  throw new Error("This is a test 500 error.")
+}
+
 module.exports = {
   buildManagement,
   buildAddClassification,
@@ -292,4 +325,6 @@ module.exports = {
   getInventoryJSON,
   editInventoryView,
   updateInventory,
+  buildDetailView,     // ✅ Added
+  triggerError         // ✅ Added
 }

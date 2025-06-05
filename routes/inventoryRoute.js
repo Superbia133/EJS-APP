@@ -57,4 +57,20 @@ router.post(
   utilities.handleErrors(invController.updateInventory)
 )
 
+// ========================
+// ✅ Vehicle Detail View (Assignment 3)
+// ========================
+router.get(
+  "/detail/:inv_id",
+  utilities.handleErrors(invController.buildDetailView)
+)
+
+// ========================
+// ✅ Intentional Error Test Route (Assignment 3 - Task 3)
+// ========================
+router.get(
+  "/error",
+  utilities.handleErrors(invController.triggerError)
+)
+
 module.exports = router

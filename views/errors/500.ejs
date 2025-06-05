@@ -1,9 +1,14 @@
+<% title = "500 - Server Error" %>
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
 <main>
   <h1>500 - Server Error</h1>
   <p>Oops! Something went wrong. Our team has been notified.</p>
+
+  <% if (typeof message !== "undefined") { %>
+    <p><em><%= message %></em></p>
+  <% } %>
 </main>
 
 <%- include('../partials/footer') %>
