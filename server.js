@@ -3,11 +3,13 @@ const session = require("express-session")
 const bodyParser = require("body-parser")
 const flash = require("connect-flash")
 const message = require("express-messages")
+const cookieParser = require("cookie-parser") // ✅ Added for JWT
 const pool = require("./database/")
 const baseController = require("./controllers/baseController")
 const staticRoutes = require("./routes/static")
 const accountRoutes = require("./routes/accountRoute")
-const inventoryRoutes = require("./routes/inventoryRoute") // ✅ Import inventory routes
+const inventoryRoutes = require("./routes/inventoryRoute") // ✅ Inventory routes
+const utilities = require("./utilities/") // ✅ Ensure utilities are available
 
 const app = express()
 
@@ -20,6 +22,12 @@ app.use(express.static("public"))
 // Body parser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for form submissions
+
+// ✅ Use cookie parser for JWT
+app.use(cookieParser())
+
+// ✅ Middleware to check JWT on every request
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * Middleware for Sessions
