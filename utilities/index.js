@@ -3,12 +3,33 @@ require("dotenv").config()
 
 const utilities = {}
 
-// Dummy example for getNav() - update according to your database
+/* ============================
+   Navigation HTML Generator
+============================ */
 utilities.getNav = async function () {
-  return `<ul><li><a href="/">Home</a></li><li><a href="/account">Account</a></li><li><a href="/inv">Inventory</a></li></ul>`
+  return `
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/inv/type/1">Custom</a></li>
+      <li><a href="/inv/type/2">Sedan</a></li>
+      <li><a href="/inv/type/3">SUV</a></li>
+      <li><a href="/inv/type/4">Truck</a></li>
+    </ul>
+  `
 }
 
-// Middleware: check for valid JWT
+/* ============================
+   Middleware: Async Error Handler
+============================ */
+utilities.handleErrors = function (fn) {
+  return function (req, res, next) {
+    return Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
+
+/* ============================
+   Middleware: JWT Verification
+============================ */
 utilities.checkJWTToken = (req, res, next) => {
   const token = req.cookies.jwt
   if (!token) return next()
@@ -24,7 +45,9 @@ utilities.checkJWTToken = (req, res, next) => {
   })
 }
 
-// Middleware: protect route
+/* ============================
+   Middleware: Require Login
+============================ */
 utilities.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
