@@ -112,4 +112,28 @@ Util.checkLogin = (req, res, next) => {
   }
 }
 
+/* ****************************************
+ * Build classification inventory grid
+ **************************************** */
+Util.buildClassificationGrid = function (data) {
+  let grid = '<ul id="inv-display">'
+  data.forEach(vehicle => {
+    grid += `<li>
+      <a href="/inv/detail/${vehicle.inv_id}" title="View ${vehicle.inv_make} ${vehicle.inv_model} details">
+        <img src="${vehicle.inv_thumbnail}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+      </a>
+      <div class="namePrice">
+        <h2>
+          <a href="/inv/detail/${vehicle.inv_id}" title="View ${vehicle.inv_make} ${vehicle.inv_model} details">
+            ${vehicle.inv_make} ${vehicle.inv_model}
+          </a>
+        </h2>
+        <span>$${vehicle.inv_price.toLocaleString()}</span>
+      </div>
+    </li>`
+  })
+  grid += "</ul>"
+  return grid
+}
+
 module.exports = Util
