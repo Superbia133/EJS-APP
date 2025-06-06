@@ -6,11 +6,9 @@ const { validationResult } = require("express-validator")
    Build Management View
 ======================== */
 async function buildManagement(req, res) {
-  let nav = await utilities.getNav()
   let classificationList = await utilities.buildClassificationList()
   res.render("inventory/management", {
     title: "Inventory Management",
-    nav,
     classificationList,
     errors: null,
     message: req.flash("message"),
@@ -21,10 +19,8 @@ async function buildManagement(req, res) {
    Build Add Classification View
 ======================== */
 async function buildAddClassification(req, res) {
-  let nav = await utilities.getNav()
   res.render("inventory/add-classification", {
     title: "Add New Classification",
-    nav,
     errors: null,
   })
 }
@@ -33,14 +29,12 @@ async function buildAddClassification(req, res) {
    Process Add Classification
 ======================== */
 async function addClassification(req, res) {
-  let nav = await utilities.getNav()
   const { classification_name } = req.body
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
     return res.render("inventory/add-classification", {
       title: "Add New Classification",
-      nav,
       errors: errors.array(),
     })
   }
@@ -60,12 +54,10 @@ async function addClassification(req, res) {
    Build Add Inventory View
 ======================== */
 async function buildAddInventory(req, res) {
-  let nav = await utilities.getNav()
   let classificationList = await utilities.buildClassificationList()
 
   res.render("inventory/add-inventory", {
     title: "Add New Inventory",
-    nav,
     classificationList,
     errors: null,
     inv_make: "",
@@ -84,7 +76,6 @@ async function buildAddInventory(req, res) {
    Process Add Inventory
 ======================== */
 async function addInventory(req, res) {
-  let nav = await utilities.getNav()
   const errors = validationResult(req)
 
   const {
@@ -105,7 +96,6 @@ async function addInventory(req, res) {
   if (!errors.isEmpty()) {
     return res.render("inventory/add-inventory", {
       title: "Add New Inventory",
-      nav,
       classificationList,
       errors: errors.array(),
       inv_make,
@@ -140,7 +130,6 @@ async function addInventory(req, res) {
     req.flash("message", "Sorry, the insert failed.")
     res.render("inventory/add-inventory", {
       title: "Add New Inventory",
-      nav,
       classificationList,
       errors: [{ msg: "Insert failed, please try again." }],
       inv_make,
@@ -174,14 +163,12 @@ async function getInventoryJSON(req, res, next) {
 ======================== */
 async function editInventoryView(req, res, next) {
   const inv_id = parseInt(req.params.inv_id)
-  let nav = await utilities.getNav()
   const itemData = await invModel.getInventoryById(inv_id)
   const classificationList = await utilities.buildClassificationList(itemData.classification_id)
   const itemName = `${itemData.inv_make} ${itemData.inv_model}`
 
   res.render("inventory/edit-inventory", {
     title: "Edit " + itemName,
-    nav,
     classificationList,
     errors: null,
     inv_id: itemData.inv_id,
@@ -202,7 +189,6 @@ async function editInventoryView(req, res, next) {
    Process Inventory Update
 ======================== */
 async function updateInventory(req, res, next) {
-  let nav = await utilities.getNav()
   const errors = validationResult(req)
 
   const {
@@ -225,7 +211,6 @@ async function updateInventory(req, res, next) {
     const itemName = `${inv_make} ${inv_model}`
     return res.status(400).render("inventory/edit-inventory", {
       title: "Edit " + itemName,
-      nav,
       classificationList,
       errors: errors.array(),
       inv_id,
@@ -265,7 +250,6 @@ async function updateInventory(req, res, next) {
     const itemName = `${inv_make} ${inv_model}`
     res.status(500).render("inventory/edit-inventory", {
       title: "Edit " + itemName,
-      nav,
       classificationList,
       errors: [{ msg: "Update failed. Please try again." }],
       inv_id,
@@ -290,12 +274,10 @@ async function buildByClassificationId(req, res, next) {
   const classification_id = req.params.classification_id
   const data = await invModel.getInventoryByClassificationId(classification_id)
   const className = data[0]?.classification_name || "Vehicles"
-  const nav = await utilities.getNav()
   const grid = await utilities.buildClassificationGrid(data)
 
   res.render("inventory/classification", {
     title: `${className} Vehicles`,
-    nav,
     grid,
   })
 }
@@ -305,7 +287,6 @@ async function buildByClassificationId(req, res, next) {
 ======================== */
 async function buildDetailView(req, res, next) {
   const inv_id = parseInt(req.params.inv_id)
-  const nav = await utilities.getNav()
 
   try {
     const data = await invModel.getInventoryById(inv_id)
@@ -318,7 +299,6 @@ async function buildDetailView(req, res, next) {
 
     res.render("inventory/detail", {
       title: itemName,
-      nav,
       html: detailHtml,
     })
   } catch (err) {
@@ -343,6 +323,6 @@ module.exports = {
   editInventoryView,
   updateInventory,
   buildDetailView,
-  buildByClassificationId, // ✅ Added
-  triggerError
+  buildByClassificationId,
+  triggerError,
 }
