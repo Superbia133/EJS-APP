@@ -58,6 +58,14 @@ router.post(
 )
 
 // ========================
+// 🔧 View Inventory by Classification ID
+// ========================
+router.get(
+  "/type/:classification_id",
+  utilities.handleErrors(invController.buildByClassificationId)
+)
+
+// ========================
 // ✅ Vehicle Detail View (Assignment 3)
 // ========================
 router.get(
