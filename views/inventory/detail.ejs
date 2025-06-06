@@ -1,11 +1,16 @@
-<%- include('../partials/head') %>
-<%- include('../partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
 
-<main>
-  <h1><%= title %></h1>
-  <div class="vehicle-container">
-    <%- html %>
-  </div>
-</main>
+    <main>
+      <h1><%= title %></h1>
+      <section class="vehicle-detail">
+        <%- html %>
+      </section>
+    </main>
 
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

@@ -1,34 +1,32 @@
-<%- include("../partials/head") %>
-<%- include("../partials/header") %>
-<%- include("../partials/nav") %>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
 
-<main>
-  <h1>Vehicle Management</h1>
+    <main>
+      <h1>Inventory Management</h1>
 
-  <% if (message) { %>
-    <p class="notice"><%= message %></p>
-  <% } %>
+      <% if (message && message.length > 0) { %>
+        <p class="notice"><%= message %></p>
+      <% } %>
 
-  <ul>
-    <li><a href="/inv/add-classification">Add New Classification</a></li>
-    <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
-  </ul>
+      <ul>
+        <li><a href="/inv/add-classification">Add New Classification</a></li>
+        <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
+      </ul>
 
-  <h2>Manage Inventory</h2>
-  <p>Select a classification to see the vehicles associated with it.</p>
+      <h2>Manage Vehicles by Classification</h2>
+      <form id="classificationForm">
+        <label for="classificationList">Choose a classification:</label><br>
+        <%- classificationList %>
+      </form>
 
-  <!-- Dropdown populated by controller -->
-  <form>
-    <%= classificationList %>
-  </form>
+      <noscript><strong>JavaScript must be enabled to use this feature.</strong></noscript>
+      <table id="inventoryDisplay"></table>
+    </main>
 
-  <!-- Table populated via JavaScript -->
-  <table id="inventoryDisplay"></table>
-
-  <noscript>JavaScript must be enabled to use this page.</noscript>
-</main>
-
-<!-- Link to AJAX script -->
-<script src="/js/inventory.js"></script>
-
-<%- include("../partials/footer") %>
+    <%- include('../partials/footer') %>
+    <script src="/js/inventory.js"></script>
+  </body>
+</html>

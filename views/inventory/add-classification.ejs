@@ -1,11 +1,29 @@
-<%- include("../partials/head") %>
-<%- include("../partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
 
-<main>
-  <h1><%= title %></h1>
-  <div class="classification-container">
-    <%- grid %>
-  </div>
-</main>
+    <main>
+      <h1>Add New Classification</h1>
 
-<%- include("../partials/footer") %>
+      <% if (errors && errors.length > 0) { %>
+        <div class="errors">
+          <ul>
+            <% errors.forEach(error => { %>
+              <li><%= error.msg %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <form action="/inv/add-classification" method="post">
+        <label for="classification_name">Classification Name</label>
+        <input type="text" id="classification_name" name="classification_name" required>
+        <button type="submit">Add Classification</button>
+      </form>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </body>
+</html>

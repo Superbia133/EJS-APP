@@ -1,16 +1,19 @@
-<%- include("../partials/head") %>
-<%- include("../partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
 
-<main>
-  <h1><%= title %></h1>
+    <main>
+      <h1><%= title %></h1>
+      <noscript><strong>JavaScript must be enabled to use this page.</strong></noscript>
+      <% if (grid) { %>
+        <%- grid %>
+      <% } else { %>
+        <p class="notice">Sorry, no matching vehicles could be found.</p>
+      <% } %>
+    </main>
 
-  <% if (grid && grid.trim().length > 0) { %>
-    <div class="inv-grid">
-      <%- grid %>
-    </div>
-  <% } else { %>
-    <p class="notice">No vehicles found in this classification.</p>
-  <% } %>
-</main>
-
-<%- include("../partials/footer") %>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

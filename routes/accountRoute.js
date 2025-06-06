@@ -2,7 +2,7 @@ const express = require("express")
 const router = new express.Router()
 const utilities = require("../utilities")
 const accountController = require("../controllers/accountController")
-const regValidate = require("../utilities/account-validation") // ✅ Validation rules
+const regValidate = require("../utilities/account-validation")
 
 // Route to build login view
 router.get(
@@ -16,7 +16,7 @@ router.get(
   utilities.handleErrors(accountController.buildRegister)
 )
 
-// Route to handle registration form submission with validation
+// Process registration with validation
 router.post(
   "/register",
   regValidate.registrationRules(),
@@ -24,7 +24,7 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
-// ✅ Route to handle login form submission
+// Process login with validation
 router.post(
   "/login",
   regValidate.loginRules(),
@@ -32,10 +32,10 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
-// ✅ Protected route for account management
+// Account management page, protected route
 router.get(
   "/",
-  utilities.checkLogin, // Must be logged in
+  utilities.checkLogin,
   utilities.handleErrors(accountController.buildManagement)
 )
 

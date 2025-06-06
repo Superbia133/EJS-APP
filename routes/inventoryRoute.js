@@ -1,84 +1,77 @@
 const express = require("express")
-const router = express.Router()
-const invController = require("../controllers/inventoryController")
-const invValidate = require("../utilities/inventory-validation")
-const utilities = require("../utilities/")
+const router = new express.Router()
+const inventoryController = require("../controllers/inventoryController")
+const utilities = require("../utilities")
+const validate = require("../utilities/inventory-validation")
 
-// ========================
-// Management View
-// ========================
-router.get("/", invController.buildManagement)
+// Inventory management view
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(inventoryController.buildManagement)
+)
 
-// ========================
-// Add Classification
-// ========================
-router.get("/add-classification", invController.buildAddClassification)
+// Add classification form
+router.get(
+  "/add-classification",
+  utilities.checkLogin,
+  utilities.handleErrors(inventoryController.buildAddClassification)
+)
+
+// Process classification add
 router.post(
   "/add-classification",
-  invValidate.classificationRules(),
-  invValidate.checkClassificationData,
-  invController.addClassification
+  validate.classificationRules(),
+  validate.checkClassificationData,
+  utilities.handleErrors(inventoryController.addClassification)
 )
 
-// ========================
-// Add Inventory
-// ========================
-router.get("/add-inventory", invController.buildAddInventory)
+// Add inventory form
+router.get(
+  "/add-inventory",
+  utilities.checkLogin,
+  utilities.handleErrors(inventoryController.buildAddInventory)
+)
+
+// Process inventory add
 router.post(
   "/add-inventory",
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  invController.addInventory
+  validate.inventoryRules(),
+  validate.checkInventoryData,
+  utilities.handleErrors(inventoryController.addInventory)
 )
 
-// ========================
-// Get Inventory by Classification (JSON for AJAX)
-// ========================
+// JSON endpoint for inventory by classification ID
 router.get(
   "/getInventory/:classification_id",
-  utilities.handleErrors(invController.getInventoryJSON)
+  utilities.handleErrors(inventoryController.getInventoryJSON)
 )
 
-// ========================
-// Edit Inventory Item (Step 1 of update)
-// ========================
+// Edit inventory form
 router.get(
   "/edit/:inv_id",
-  utilities.handleErrors(invController.editInventoryView)
+  utilities.checkLogin,
+  utilities.handleErrors(inventoryController.editInventoryView)
 )
 
-// ========================
-// Update Inventory Item (Step 2 of update)
-// ========================
+// Process inventory update
 router.post(
-  "/update",
-  invValidate.inventoryRules(),
-  invValidate.checkUpdateData,
-  utilities.handleErrors(invController.updateInventory)
+  "/update/",
+  validate.inventoryRules(),
+  validate.checkInventoryData,
+  utilities.handleErrors(inventoryController.updateInventory)
 )
 
-// ========================
-// 🔧 View Inventory by Classification ID
-// ========================
+// View inventory by classification
 router.get(
   "/type/:classification_id",
-  utilities.handleErrors(invController.buildByClassificationId)
+  utilities.handleErrors(inventoryController.buildByClassificationId)
 )
 
-// ========================
-// ✅ Vehicle Detail View (Assignment 3)
-// ========================
+// Detail view of a vehicle
 router.get(
   "/detail/:inv_id",
-  utilities.handleErrors(invController.buildDetailView)
-)
-
-// ========================
-// ✅ Intentional Error Test Route (Assignment 3 - Task 3)
-// ========================
-router.get(
-  "/error",
-  utilities.handleErrors(invController.triggerError)
+  utilities.handleErrors(inventoryController.buildDetailView)
 )
 
 module.exports = router
