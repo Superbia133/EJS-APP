@@ -284,6 +284,23 @@ async function updateInventory(req, res, next) {
 }
 
 /* ========================
+   Build Classification View
+======================== */
+async function buildByClassificationId(req, res, next) {
+  const classification_id = req.params.classification_id
+  const data = await invModel.getInventoryByClassificationId(classification_id)
+  const className = data[0]?.classification_name || "Vehicles"
+  const nav = await utilities.getNav()
+  const grid = await utilities.buildClassificationGrid(data)
+
+  res.render("inventory/classification", {
+    title: `${className} Vehicles`,
+    nav,
+    grid,
+  })
+}
+
+/* ========================
    Build Detail View (Assignment 3)
 ======================== */
 async function buildDetailView(req, res, next) {
@@ -325,6 +342,7 @@ module.exports = {
   getInventoryJSON,
   editInventoryView,
   updateInventory,
-  buildDetailView,     // ✅ Added
-  triggerError         // ✅ Added
+  buildDetailView,
+  buildByClassificationId, // ✅ Added
+  triggerError
 }
