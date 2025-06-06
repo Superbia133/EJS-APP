@@ -1,7 +1,11 @@
 <header>
   <h1 class="logo">CSE Motors</h1>
-  <nav>
-    <a class="account" href="/account/login">My Account</a>
-    <%- nav %> <!-- ✅ Nav list is now inside <nav> for proper styling -->
+  <nav class="main-nav">
+    <div class="nav-links">
+      <%- nav %> <!-- Injects dynamic navigation list -->
+    </div>
+    <div class="account-link">
+      <a class="account" href="/account/login">My Account</a>
+    </div>
   </nav>
 </header>
