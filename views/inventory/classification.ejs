@@ -1,0 +1,16 @@
+<%- include("../partials/head") %>
+<%- include("../partials/header") %>
+
+<main>
+  <h1><%= title %></h1>
+
+  <% if (grid && grid.trim().length > 0) { %>
+    <div class="inv-grid">
+      <%- grid %>
+    </div>
+  <% } else { %>
+    <p class="notice">No vehicles found in this classification.</p>
+  <% } %>
+</main>
+
+<%- include("../partials/footer") %>

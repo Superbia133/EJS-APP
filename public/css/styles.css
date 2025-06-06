@@ -1,11 +1,10 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   background: white;
   color: #111;
   max-width: 960px;
-  margin: auto;
 }
 
 header {
@@ -33,23 +32,19 @@ header {
   gap: 1rem;
 }
 
-.nav-links ul li a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.nav-links ul li a:hover {
-  text-decoration: underline;
-}
-
+.nav-links ul li a,
 .account-link .account {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
 
-/* OLD nav styles – safe to remove if you no longer use inline navs */
+.nav-links ul li a:hover,
+.account-link .account:hover {
+  text-decoration: underline;
+}
+
+/* OLD nav styles – safe to remove if unused */
 nav ul {
   list-style: none;
   display: flex;
@@ -64,6 +59,51 @@ nav ul li a {
   text-decoration: none;
 }
 
+/* ===== Inventory Grid Styles ===== */
+#inv-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  margin: 0;
+  list-style: none;
+}
+
+#inv-display li {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #fff;
+  transition: transform 0.2s ease;
+}
+
+#inv-display li:hover {
+  transform: scale(1.02);
+}
+
+#inv-display img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.namePrice {
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+.namePrice h2 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.namePrice span {
+  color: #0074d9;
+  font-weight: bold;
+}
+
+/* ===== Hero Section ===== */
 .hero {
   display: flex;
   flex-direction: column;
@@ -90,6 +130,7 @@ nav ul li a {
   margin-top: 1rem;
 }
 
+/* ===== Reviews & Upgrades Section ===== */
 .reviews-upgrades {
   display: flex;
   flex-direction: column;
