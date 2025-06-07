@@ -11,7 +11,12 @@
       </ul>
     </div>
     <div class="account-link">
-      <a class="account" href="/account/login">My Account</a>
+      <% if (locals.loggedin && locals.accountData) { %>
+        <a class="account" href="/account">Welcome <%= locals.accountData.firstname %></a>
+        <a class="account" href="/account/logout">Logout</a>
+      <% } else { %>
+        <a class="account" href="/account/login">My Account</a>
+      <% } %>
     </div>
   </div>
 </header>

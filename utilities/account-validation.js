@@ -8,19 +8,19 @@ const accValidate = {}
 ================================ */
 accValidate.registrationRules = () => {
   return [
-    body("first_name")
+    body("account_firstname")
       .trim()
-      .isLength({ min: 1 })
+      .notEmpty()
       .withMessage("First name is required."),
-    body("last_name")
+    body("account_lastname")
       .trim()
-      .isLength({ min: 1 })
+      .notEmpty()
       .withMessage("Last name is required."),
-    body("email")
+    body("account_email")
       .trim()
       .isEmail()
       .withMessage("A valid email is required."),
-    body("password")
+    body("account_password")
       .trim()
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters.")
@@ -31,18 +31,18 @@ accValidate.registrationRules = () => {
    Check Registration Validation Results
 ================================ */
 accValidate.checkRegData = async (req, res, next) => {
-  const { first_name, last_name, email } = req.body
-  let errors = validationResult(req)
-  let nav = await utilities.getNav()
+  const { account_firstname, account_lastname, account_email } = req.body
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
 
   if (!errors.isEmpty()) {
     res.render("account/register", {
       title: "Register",
       nav,
       errors: errors.array(),
-      first_name,
-      last_name,
-      email
+      account_firstname,
+      account_lastname,
+      account_email
     })
     return
   }
@@ -54,11 +54,11 @@ accValidate.checkRegData = async (req, res, next) => {
 ================================ */
 accValidate.loginRules = () => {
   return [
-    body("email")
+    body("account_email")
       .trim()
       .isEmail()
       .withMessage("A valid email is required."),
-    body("password")
+    body("account_password")
       .trim()
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters.")
@@ -69,16 +69,97 @@ accValidate.loginRules = () => {
    Check Login Validation Results
 ================================ */
 accValidate.checkLoginData = async (req, res, next) => {
-  const { email } = req.body
-  let errors = validationResult(req)
-  let nav = await utilities.getNav()
+  const { account_email } = req.body
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
 
   if (!errors.isEmpty()) {
     res.render("account/login", {
       title: "Login",
       nav,
       errors: errors.array(),
-      email
+      account_email
+    })
+    return
+  }
+  next()
+}
+
+/* ===============================
+   Account Update Validation Rules
+================================ */
+accValidate.updateAccountRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .notEmpty()
+      .withMessage("First name is required."),
+    body("account_lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Last name is required."),
+    body("account_email")
+      .trim()
+      .isEmail()
+      .withMessage("A valid email is required.")
+  ]
+}
+
+/* ===============================
+   Check Update Validation Results
+================================ */
+accValidate.checkUpdateData = async (req, res, next) => {
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
+
+  if (!errors.isEmpty()) {
+    res.render("account/account-update", {
+      title: "Update Account",
+      nav,
+      errors: errors.array(),
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    })
+    return
+  }
+  next()
+}
+
+/* ===============================
+   Password Update Validation Rules
+================================ */
+accValidate.passwordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/)
+      .withMessage(
+        "Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and special character."
+      )
+  ]
+}
+
+/* ===============================
+   Check Password Validation Results
+================================ */
+accValidate.checkPasswordData = async (req, res, next) => {
+  const { account_id } = req.body
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
+  const accountData = await require("../models/account-model").getAccountById(account_id)
+
+  if (!errors.isEmpty()) {
+    res.render("account/account-update", {
+      title: "Update Account",
+      nav,
+      errors: errors.array(),
+      account_id,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email
     })
     return
   }
