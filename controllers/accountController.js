@@ -79,11 +79,14 @@ function logout(req, res) {
 /* Account management view */
 async function buildManagement(req, res) {
   const nav = await utilities.getNav()
+  const accountData = res.locals.accountData
+
   res.render("account/management", {
     title: "Account Management",
     nav,
     notice: req.flash("notice"),
     errors: null,
+    accountData
   })
 }
 
