@@ -3,13 +3,14 @@ const session = require("express-session")
 const bodyParser = require("body-parser")
 const flash = require("connect-flash")
 const message = require("express-messages")
-const cookieParser = require("cookie-parser") // ✅ Added for JWT
+const cookieParser = require("cookie-parser")
 const pool = require("./database/")
 const baseController = require("./controllers/baseController")
 const staticRoutes = require("./routes/static")
 const accountRoutes = require("./routes/accountRoute")
-const inventoryRoutes = require("./routes/inventoryRoute") // ✅ Inventory routes
-const utilities = require("./utilities/") // ✅ Ensure utilities are available
+const inventoryRoutes = require("./routes/inventoryRoute")
+const contactRoutes = require("./routes/contactRoute") // ✅ NEW: Contact route
+const utilities = require("./utilities/")
 
 const app = express()
 
@@ -21,12 +22,12 @@ app.use(express.static("public"))
 
 // Body parser middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for form submissions
+app.use(bodyParser.urlencoded({ extended: true }))
 
-// ✅ Use cookie parser for JWT
+// Cookie parser for JWT
 app.use(cookieParser())
 
-// ✅ Middleware to check JWT on every request
+// JWT middleware
 app.use(utilities.checkJWTToken)
 
 /* ***********************
@@ -60,7 +61,8 @@ app.get("/", baseController.buildHome)
 // Use route files
 app.use("/", staticRoutes)
 app.use("/account", accountRoutes)
-app.use("/inv", inventoryRoutes) // ✅ Register inventory route
+app.use("/inv", inventoryRoutes)
+app.use("/contact", contactRoutes) // ✅ NEW: Mount contact routes
 
 // 500 Error Handler (Server errors)
 app.use(async (err, req, res, next) => {
